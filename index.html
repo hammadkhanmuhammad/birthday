@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday, Fatima! 🎉</title>
+  <style>
+    :root{
+      --bg1:#fff5f7;
+      --bg2:#f0f9ff;
+      --card:#ffffff;
+      --ink:#1f2937;
+      --accent:#ff4da6; /* pink */
+      --accent-2:#7c3aed; /* purple */
+      --accent-3:#22c55e; /* green */
+      --accent-4:#fb923c; /* orange */
+      --shadow: 0 10px 30px rgba(31,41,55,.12);
+      --radius: 22px;
+    }
+
+    /* Page */
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background: radial-gradient(1200px 800px at 10% 10%, var(--bg1), transparent),
+                  radial-gradient(1200px 800px at 90% 90%, var(--bg2), transparent),
+                  linear-gradient(120deg, #fdf2f8, #eef2ff 60%, #f0f9ff);
+      display:grid;
+      place-items:center;
+      padding:24px;
+      overflow-x:hidden;
+    }
+
+    /* Floating balloons */
+    .balloons{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden;
+    }
+    .balloon{position:absolute; bottom:-120px; width:22px; aspect-ratio:1/1.2; border-radius:50% 50% 45% 45%; opacity:.9}
+    .balloon::after{content:""; position:absolute; left:50%; top:95%; width:2px; height:36px; background:rgba(0,0,0,.1); transform:translateX(-50%)}
+    @keyframes floatUp{from{transform:translateY(0) translateX(0)} to{transform:translateY(-120vh) translateX(var(--drift, 0))}}
+
+    /* Card */
+    .card{
+      width:min(720px, 92vw);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:clamp(18px, 4vw, 36px);
+      position:relative;
+      overflow:hidden;
+      backdrop-filter: blur(4px);
+    }
+    .ribbon{
+      position:absolute; inset:auto -40px -40px auto; transform:rotate(-30deg);
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      color:white; font-weight:700; letter-spacing:.08em; padding:10px 70px; border-radius:999px; font-size:12px; opacity:.2;
+    }
+
+    .title{font-size: clamp(28px, 4.8vw, 44px); margin:0 0 6px; line-height:1.1}
+    .subtitle{font-size:clamp(16px, 2.6vw, 18px); opacity:.75; margin:0 0 20px}
+
+    .wish{font-size:clamp(16px, 2.4vw, 18px); line-height:1.75; margin: 18px 0 22px}
+    .em{font-weight:700; background:linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+
+    .divider{height:1px; background:linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); margin: 18px 0}
+
+    .from{font-size:14px; opacity:.7}
+
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+    button{
+      border:0; cursor:pointer; border-radius:14px; padding:12px 16px; font-weight:600;
+      box-shadow: var(--shadow); transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-primary{background: linear-gradient(90deg, var(--accent), var(--accent-2)); color:white}
+    .btn-ghost{background:white}
+    button:active{transform: translateY(1px); box-shadow: 0 4px 14px rgba(31,41,55,.16)}
+
+    /* Confetti */
+    .confetti{position:fixed; inset:0; pointer-events:none}
+    .confetti span{position:absolute; width:8px; height:14px; border-radius:2px; opacity:.9}
+    @keyframes fall{to{transform: translateY(110vh) rotate(720deg)}}
+
+    /* Footer */
+    .tiny{margin-top:14px; font-size:12px; opacity:.6}
+
+    @media print{
+      body{background:white}
+      .balloons,.confetti,.actions,.tiny{display:none}
+      .card{box-shadow:none}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Balloons (generated inline via JS) -->
+  <div class="balloons" id="balloons"></div>
+
+  <main class="card" role="main" aria-labelledby="title">
+    <div class="ribbon">BEST FRIEND EDITION</div>
+    <h1 id="title" class="title">Happy Birthday, <span class="em">Fatima</span>! 🎉</h1>
+    <p class="subtitle">To my best friend—today is all about you. 💖</p>
+
+    <p class="wish">
+      On your special day, I just want to say how grateful I am for your friendship. You’re not just a friend—you’re family. May your year be filled with
+      soaring success, peaceful moments, good health, and laughter that never ends. May every dream in your heart find its way to reality and may your smile
+      always shine brighter than the stars.
+    </p>
+
+    <p class="wish">
+      Thank you for the countless memories, late-night talks, and the way you make life lighter. Here’s to new adventures, bigger wins, and happiness that sticks around.
+      Stay blessed and keep shining always! ✨
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="from">— With love, from your best friend 💞</div>
+
+    <div class="actions">
+      <button class="btn-primary" id="copyBtn" aria-label="Copy wish text">Copy Wish</button>
+      <button class="btn-ghost" onclick="window.print()" aria-label="Print or save as PDF">Print / Save as PDF</button>
+      <button class="btn-ghost" id="toggleConfetti" aria-label="Toggle confetti">🎊 Toggle Confetti</button>
+    </div>
+
+    <div class="tiny">Tip: Edit the name “Fatima” or the message text in the HTML to personalize.</div>
+  </main>
+
+  <!-- Confetti container -->
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    // --- Copy to clipboard ---
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', () => {
+      const text = `Happy Birthday, Fatima! To my best friend—today is all about you. On your special day, I’m grateful for your friendship. May your year be filled with success, peace, good health, and endless laughter. May your dreams come true and your smile always shine bright. Thank you for the memories and the way you make life lighter. Here’s to new adventures and happiness that lasts. Stay blessed and keep shining always!`;
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = 'Copied! ✅';
+        setTimeout(()=> copyBtn.textContent = 'Copy Wish', 1500);
+      }).catch(()=>{
+        alert('Copy failed. You can select the text and copy manually.');
+      });
+    });
+
+    // --- Balloons generator ---
+    const balloonWrap = document.getElementById('balloons');
+    const colors = ['#ff4da6', '#7c3aed', '#22c55e', '#fb923c', '#38bdf8'];
+    for(let i=0;i<18;i++){
+      const b = document.createElement('div');
+      b.className='balloon';
+      const left = Math.random()*100;
+      b.style.left = left + 'vw';
+      b.style.background = colors[i % colors.length];
+      b.style.setProperty('--drift', (Math.random()*60-30) + 'px');
+      b.style.animation = `floatUp ${12+Math.random()*10}s linear ${Math.random()*8}s infinite`;
+      balloonWrap.appendChild(b);
+    }
+
+    // --- Confetti ---
+    const confetti = document.getElementById('confetti');
+    const toggleBtn = document.getElementById('toggleConfetti');
+    let confettiOn = true;
+
+    function populateConfetti(){
+      confetti.innerHTML='';
+      const pieces = 80;
+      for(let i=0;i<pieces;i++){
+        const s = document.createElement('span');
+        s.style.left = Math.random()*100 + 'vw';
+        s.style.top = (-10 - Math.random()*60) + 'vh';
+        const col = colors[i % colors.length];
+        s.style.background = col;
+        s.style.transform = `translateY(0) rotate(${Math.random()*360}deg)`;
+        s.style.animation = `fall ${6 + Math.random()*6}s linear ${Math.random()*6}s infinite`;
+        confetti.appendChild(s);
+      }
+    }
+
+    populateConfetti();
+
+    toggleBtn.addEventListener('click', () => {
+      confettiOn = !confettiOn;
+      confetti.style.display = confettiOn ? 'block' : 'none';
+      toggleBtn.textContent = confettiOn ? '🎊 Toggle Confetti' : '🎊 Confetti Off';
+    });
+  </script>
+</body>
+</html>
