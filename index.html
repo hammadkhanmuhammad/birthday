@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Happy Birthday, Fatima! 🎉</title>
   <style>
     :root{
@@ -15,10 +15,11 @@
       --accent-3:#22c55e; /* green */
       --accent-4:#fb923c; /* orange */
       --shadow: 0 10px 30px rgba(31,41,55,.12);
-      --radius: 22px;
+      --radius: 18px;
+      --safe-pad: max(env(safe-area-inset-left), env(safe-area-inset-right), 16px);
     }
 
-    /* Page */
+    /* Reset + base */
     html,body{height:100%}
     body{
       margin:0;
@@ -29,61 +30,86 @@
                   linear-gradient(120deg, #fdf2f8, #eef2ff 60%, #f0f9ff);
       display:grid;
       place-items:center;
-      padding:24px;
+      padding:24px calc(16px + var(--safe-pad));
       overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      -webkit-touch-callout:none;
+      -webkit-user-select:none;
     }
 
-    /* Floating balloons */
+    /* Floating Balloons */
     .balloons{
       position:fixed; inset:0; pointer-events:none; overflow:hidden;
     }
-    .balloon{position:absolute; bottom:-120px; width:22px; aspect-ratio:1/1.2; border-radius:50% 50% 45% 45%; opacity:.9}
-    .balloon::after{content:""; position:absolute; left:50%; top:95%; width:2px; height:36px; background:rgba(0,0,0,.1); transform:translateX(-50%)}
+    .balloon{position:absolute; bottom:-120px; width:28px; aspect-ratio:1/1.2; border-radius:50% 50% 45% 45%; opacity:.95}
+    .balloon::after{content:""; position:absolute; left:50%; top:95%; width:2px; height:36px; background:rgba(0,0,0,.08); transform:translateX(-50%)}
     @keyframes floatUp{from{transform:translateY(0) translateX(0)} to{transform:translateY(-120vh) translateX(var(--drift, 0))}}
 
     /* Card */
     .card{
-      width:min(720px, 92vw);
+      width:100%;
+      max-width:720px;
       background:var(--card);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:clamp(18px, 4vw, 36px);
+      padding:clamp(18px, 4vw, 32px);
       position:relative;
       overflow:hidden;
       backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
     }
     .ribbon{
-      position:absolute; inset:auto -40px -40px auto; transform:rotate(-30deg);
+      position:absolute; inset:auto -36px -36px auto; transform:rotate(-30deg);
       background:linear-gradient(135deg, var(--accent), var(--accent-2));
-      color:white; font-weight:700; letter-spacing:.08em; padding:10px 70px; border-radius:999px; font-size:12px; opacity:.2;
+      color:white; font-weight:700; letter-spacing:.08em; padding:8px 60px; border-radius:999px; font-size:12px; opacity:.18;
     }
 
-    .title{font-size: clamp(28px, 4.8vw, 44px); margin:0 0 6px; line-height:1.1}
-    .subtitle{font-size:clamp(16px, 2.6vw, 18px); opacity:.75; margin:0 0 20px}
+    .title{font-size: clamp(24px, 6vw, 40px); margin:0 0 6px; line-height:1.05}
+    .subtitle{font-size:clamp(14px, 3.2vw, 16px); opacity:.78; margin:0 0 16px}
 
-    .wish{font-size:clamp(16px, 2.4vw, 18px); line-height:1.75; margin: 18px 0 22px}
-    .em{font-weight:700; background:linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .wish{font-size:clamp(15px, 3.2vw, 17px); line-height:1.7; margin: 14px 0 18px}
+    .em{font-weight:800; background:linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent}
 
-    .divider{height:1px; background:linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); margin: 18px 0}
+    .divider{height:1px; background:linear-gradient(90deg, transparent, rgba(0,0,0,.06), transparent); margin: 14px 0}
 
-    .from{font-size:14px; opacity:.7}
+    .from{font-size:14px; opacity:.78}
 
-    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
     button{
-      border:0; cursor:pointer; border-radius:14px; padding:12px 16px; font-weight:600;
-      box-shadow: var(--shadow); transition: transform .15s ease, box-shadow .15s ease;
+      border:0; cursor:pointer; border-radius:12px; padding:12px 14px; font-weight:700;
+      box-shadow: var(--shadow); transition: transform .12s ease, box-shadow .12s ease;
+      min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:15px;
     }
     .btn-primary{background: linear-gradient(90deg, var(--accent), var(--accent-2)); color:white}
     .btn-ghost{background:white}
-    button:active{transform: translateY(1px); box-shadow: 0 4px 14px rgba(31,41,55,.16)}
+    button:active{transform: translateY(1px); box-shadow: 0 6px 18px rgba(31,41,55,.14)}
 
     /* Confetti */
     .confetti{position:fixed; inset:0; pointer-events:none}
-    .confetti span{position:absolute; width:8px; height:14px; border-radius:2px; opacity:.9}
+    .confetti span{position:absolute; width:8px; height:14px; border-radius:2px; opacity:.95}
     @keyframes fall{to{transform: translateY(110vh) rotate(720deg)}}
 
-    /* Footer */
-    .tiny{margin-top:14px; font-size:12px; opacity:.6}
+    /* Tiny footer */
+    .tiny{margin-top:12px; font-size:12px; opacity:.6}
+
+    /* Mobile specific tweaks */
+    @media (max-width:520px){
+      body{padding:18px 14px}
+      .balloons{display:none} /* hide decorative balloons on small screens for clarity */
+      .card{padding:18px}
+      .ribbon{display:none}
+      .title{font-size:24px}
+      .wish{font-size:15px}
+      .actions{flex-direction:column}
+      button{width:100%; border-radius:12px}
+      .from{font-size:15px}
+      .confetti{display:none}
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .balloon, .confetti span{animation:none}
+    }
 
     @media print{
       body{background:white}
@@ -94,8 +120,8 @@
 </head>
 <body>
 
-  <!-- Floating Balloons (generated inline via JS) -->
-  <div class="balloons" id="balloons"></div>
+  <!-- Floating Balloons (hidden on small screens) -->
+  <div class="balloons" id="balloons" aria-hidden="true"></div>
 
   <main class="card" role="main" aria-labelledby="title">
     <div class="ribbon">BEST FRIEND EDITION</div>
@@ -127,43 +153,57 @@
   </main>
 
   <!-- Confetti container -->
-  <div class="confetti" id="confetti"></div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
 
   <script>
     // --- Copy to clipboard ---
     const copyBtn = document.getElementById('copyBtn');
     copyBtn.addEventListener('click', () => {
       const text = `Happy Birthday, Fatima! To my best friend—today is all about you. On your special day, I’m grateful for your friendship. May your year be filled with success, peace, good health, and endless laughter. May your dreams come true and your smile always shine bright. Thank you for the memories and the way you make life lighter. Here’s to new adventures and happiness that lasts. Stay blessed and keep shining always!`;
-      navigator.clipboard.writeText(text).then(() => {
-        copyBtn.textContent = 'Copied! ✅';
-        setTimeout(()=> copyBtn.textContent = 'Copy Wish', 1500);
-      }).catch(()=>{
-        alert('Copy failed. You can select the text and copy manually.');
-      });
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          copyBtn.textContent = 'Copied! ✅';
+          setTimeout(()=> copyBtn.textContent = 'Copy Wish', 1500);
+        }).catch(()=> fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
     });
 
-    // --- Balloons generator ---
+    function fallbackCopy(text){
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly','');
+      ta.style.position='absolute'; ta.style.left='-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try{ document.execCommand('copy'); copyBtn.textContent='Copied! ✅'; setTimeout(()=> copyBtn.textContent = 'Copy Wish',1500);}catch(e){ alert('Copy failed. Select the text and copy manually.'); }
+      document.body.removeChild(ta);
+    }
+
+    // --- Balloons generator (lighter on DOM for mobile) ---
     const balloonWrap = document.getElementById('balloons');
     const colors = ['#ff4da6', '#7c3aed', '#22c55e', '#fb923c', '#38bdf8'];
-    for(let i=0;i<18;i++){
+    const isSmall = window.matchMedia('(max-width:520px)').matches;
+    const count = isSmall ? 0 : 14; // no balloons on small screens
+    for(let i=0;i<count;i++){
       const b = document.createElement('div');
       b.className='balloon';
       const left = Math.random()*100;
       b.style.left = left + 'vw';
       b.style.background = colors[i % colors.length];
       b.style.setProperty('--drift', (Math.random()*60-30) + 'px');
-      b.style.animation = `floatUp ${12+Math.random()*10}s linear ${Math.random()*8}s infinite`;
+      b.style.animation = `floatUp ${12+Math.random()*10}s linear ${Math.random()*6}s infinite`;
       balloonWrap.appendChild(b);
     }
 
     // --- Confetti ---
     const confetti = document.getElementById('confetti');
     const toggleBtn = document.getElementById('toggleConfetti');
-    let confettiOn = true;
+    let confettiOn = false; // default off on mobile for performance
 
     function populateConfetti(){
       confetti.innerHTML='';
-      const pieces = 80;
+      const pieces = 60;
       for(let i=0;i<pieces;i++){
         const s = document.createElement('span');
         s.style.left = Math.random()*100 + 'vw';
@@ -176,13 +216,19 @@
       }
     }
 
+    // Populate once but keep hidden on small screens
     populateConfetti();
+    confetti.style.display = 'none';
 
     toggleBtn.addEventListener('click', () => {
       confettiOn = !confettiOn;
       confetti.style.display = confettiOn ? 'block' : 'none';
-      toggleBtn.textContent = confettiOn ? '🎊 Toggle Confetti' : '🎊 Confetti Off';
+      toggleBtn.textContent = confettiOn ? '🎊 Confetti On' : '🎊 Confetti Off';
     });
+
+    // Accessibility: allow keyboard copy
+    copyBtn.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') copyBtn.click(); });
   </script>
 </body>
 </html>
+
